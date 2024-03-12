@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="co_omni_message_form_view" model="ir.ui.view">
+            <field name="name">co_omni.message.form</field>
+            <field name="model">co_omni.message</field>
+            <field name="arch" type="xml">
+                <form string="Omni Messenger">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="channel_id"/>
+                            <h1>
+                                <field name="channel_id" placeholder="Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="channel_code"/>
+                                <field name="sender_id"/>
+                                <field name="type" widget="selection_badge"/>
+                            </group>
+                            <group>
+                                <field name="receiver_id"/>
+                                <field name="timestamp"/>
+                                <field name="user_id" widget="many2one_avatar"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Content">
+                                <field name="content" widget="sms_widget"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="co_omni_message_tree_view" model="ir.ui.view">
+            <field name="name">co_omni.message.tree</field>
+            <field name="model">co_omni.message</field>
+            <field name="arch" type="xml">
+                <tree string="Omni Messenger"
+                        js_class="btn_wizard_create_message"
+                        class="o_omni_messenger"
+                        expand="True"
+                        decoration-info="type == 'receive'"
+                        decoration-success="type == 'send'"
+                >
+                    <field name="contact_id" widget="many2one_avatar" class="font-weight-bold"/>
+                    <field name="type"
+                            widget="badge"
+                            class="text-white"
+                            decoration-success="type == 'send'"
+                            decoration-info="type == 'receive'"
+                    />
+                    <field name="channel_id" invisible="True"/>
+                    <field name="channel_code" invisible="True"/>
+                    <field name="content" class="small font-italic"/>
+                    <field name="timestamp"/>
+                    <field name="account_id" widget="many2one_avatar" class="font-weight-bold"/>
+                    <field name="user_id" widget="many2one_avatar" class="font-weight-bold"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_co_omni_message_tree_with_onboarding" model="ir.ui.view">
+            <field name="name">co_omni.message.tree.inherit</field>
+            <field name="model">co_omni.message</field>
+            <field name="inherit_id" ref="co_omni_message_tree_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="banner_route">/co_omni/co_omni_message_onboarding_panel</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="co_omni_message_search_view" model="ir.ui.view">
+            <field name="name">co_omni.message.search</field>
+            <field name="model">co_omni.message</field>
+            <field name="arch" type="xml">
+                <search string="Omni Messenger">
+                    <field name="content"
+                            filter_domain="[
+                                '|', '|', '|', '|',
+                                ('content', 'ilike', self),
+                                ('sender_id', 'ilike', self),
+                                ('receiver_id', 'ilike', self),
+                                ('channel_id', 'ilike', self),
+                                ('channel_code', 'like', self)
+                            ]"
+                            string="Search any..."
+                    />
+                    <field name="sender_id"/>
+                    <field name="receiver_id"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Channel" name="group_by_channel_id" domain="[]"
+                                context="{'group_by':'channel_id'}"/>
+                        <filter string="Type" name="group_by_type" domain="[]"
+                                context="{'group_by':'type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="co_omni_message_act_window" model="ir.actions.act_window">
+            <field name="name">Omni Message</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">co_omni.message</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('co_omni_message_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('co_omni_message_form_view')})]"/>
+            <field name="search_view_id" ref="co_omni_message_search_view"/>
+            <field name="view_mode">tree,form</field>
+            <field name="context">
+                {'search_default_group_by_channel_id': 1}
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create text-primary">
+                    There is no examples click here to add new Messenger.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="co_omni_account_form_view" model="ir.ui.view">
+            <field name="name">co_omni.account.view.form</field>
+            <field name="model">co_omni.account</field>
+            <field name="arch" type="xml">
+                <form string="Omni Account">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="external_id"/>
+                                <field name="utm_source_id"/>
+                                <field name="unread_message"/>
+                                <field name="unanswered_message"/>
+                            </group>
+                            <group>
+                                <field name="image_1920" widget="image" class="o_lunch_image oe_avatar"
+                                        options="{'image_preview': 'image_128'}"/>
+                                <field name="new_message"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="co_omni_account_tree_view" model="ir.ui.view">
+            <field name="name">co_omni.account.view.tree</field>
+            <field name="model">co_omni.account</field>
+            <field name="arch" type="xml">
+                <tree string="Omni Account"
+                        decoration-success="new_message_count > 0"
+                        decoration-info="new_message_count == 0"
+                >
+                    <field name="utm_source_id"
+                            class="font-weight-bold"
+                            widget="reference"
+                            decoration-success="new_message_count > 0"
+                            decoration-info="new_message_count == 0"
+                    />
+                    <field name="name"/>
+                    <field name="new_message_count" invisible="1"/>
+                    <field name="unread_message"
+                            widget="badge"
+                            decoration-success="new_message_count > 0"
+                            decoration-info="new_message_count == 0"
+                            class="text-white"
+                    />
+                    <field name="unanswered_message"
+                            widget="badge"
+                            decoration-info="unread_message"
+                    />
+                    <field name="latest_message"/>
+                    <button class="btn btn-outline-primary border-0"
+                            type="object"
+                            name="action_redirect_to_channel"
+                            icon="fa-paper-plane"
+                            string=" New Message"
+                    />
+                </tree>
+            </field>
+        </record>
+
+        <record id="co_omni_account_kanban_view" model="ir.ui.view" >
+            <field name="name">co_omni.account.kanban</field>
+            <field name="model">co_omni.account</field>
+            <field name="arch" type="xml">
+                <kanban class="o_co_omni_account_kanban" sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="utm_source_id"/>
+                    <field name="image_128"/>
+                    <field name="image_1920"/>
+                    <field name="new_message_count"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_kanban_record_has_image_fill o_co_omni_account_kanban rounded">
+                                <div class="o_kanban_image_fill_left mx-0">
+                                    <div class="text-center">
+                                        <t t-if="record.image_1920.raw_value">
+                                            <img
+                                                    t-att-src="kanban_image('co_omni.account', 'image_128', record.id.raw_value)"
+                                                    t-att-title="record.name.value"
+                                                    t-att-alt="record.name.value"
+                                                    class="oe_avatar mt-2 w-75 h-auto"
+                                            />
+                                        </t>
+                                        <t t-else="">
+                                            <img class="oe_avatar mt-2 w-75 h-auto"
+                                                    src="/co_omni/static/src/img/default_fanpage_avatar.png"
+                                                    alt="Default Avatar Account"/>
+                                        </t>
+                                        <p class="mb-0 font-weight-bold text-center">
+                                            <field name="name"/>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_details d-flex flex-column">
+                                    <strong class="o_kanban_record_title oe_partner_heading text-right text-primary" style="font-size: 1.5rem;">
+                                        <field name="utm_source_id"/>
+                                    </strong>
+                                    <div class="o_kanban_record_bottom mt-auto d-flex justify-content-end align-items-end">
+                                        <button name="action_redirect_to_channel"
+                                                type="object"
+                                                class="btn btn-outline-primary rounded-leaf">
+                                            <span>
+                                                <i class="fa fa-comments mr-1" aria-label="New Message" role="img" title="New Message"/>
+                                                New message:
+                                                <field name="new_message_count"/>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="co_omni_account_search_view" model="ir.ui.view">
+            <field name="name">co_omni.account.view.search</field>
+            <field name="model">co_omni.account</field>
+            <field name="arch" type="xml">
+                <search string="Omni Account">
+                    <field name="name"/>
+                    <field name="utm_source_id"/>
+                    <field name="channel_ids"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="co_omni_account_view_act_window" model="ir.actions.act_window">
+            <field name="name">Omni Account</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">co_omni.account</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('co_omni_account_kanban_view')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('co_omni_account_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('co_omni_account_form_view')})]"/>
+            <field name="search_view_id" ref="co_omni_account_search_view"/>
+            <field name="view_mode">kanban,form,tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create text-success">
+                    There is no examples click here to add new Omni Pages.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

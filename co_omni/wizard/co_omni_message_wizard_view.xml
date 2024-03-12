@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="co_omni_message_wizard_form_view" model="ir.ui.view">
+            <field name="name">co_omni.message.wizard.view.form</field>
+            <field name="model">co_omni.message.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Omni Messenger">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="channel_id"/>
+                                <field name="channel_code"/>
+                            </group>
+                            <group>
+                                <field name="sender_id"/>
+                                <field name="receiver_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Content" >
+                                <field name="content" widget="char_emojis"/>
+                            </page>
+                        </notebook>
+                        <footer>
+                            <button
+                                    string="Create"
+                                    name="create_omni_messenger"
+                                    type="object"
+                                    class="btn-primary"
+                            >
+                            </button>
+                            <button string="Cancel" class="btn-outline-danger" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

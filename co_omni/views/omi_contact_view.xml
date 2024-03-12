@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="co_omni_contact_kanban_view" model="ir.ui.view" >
+            <field name="name">co_omni.contact.kanban</field>
+            <field name="model">co_omni.contact</field>
+            <field name="arch" type="xml">
+                <kanban class="o_co_omni_contact_kanban" sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="image_128"/>
+                    <field name="image_1920"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_kanban_record_has_image_fill oe_kanban_global_click o_co_omni_account_kanban rounded">
+                                <div class="o_kanban_image_fill_left mx-0">
+                                    <div class="text-center py-2">
+                                        <t t-if="record.image_1920.raw_value">
+                                            <img
+                                                    t-att-src="kanban_image('co_omni.contact', 'image_128', record.id.raw_value)"
+                                                    t-att-title="record.name.value"
+                                                    t-att-alt="record.name.value"
+                                                    class="oe_avatar w-100 h-auto"
+                                            />
+                                        </t>
+                                        <t t-else="">
+                                            <img class="oe_avatar w-100 h-auto"
+                                                    src="/co_omni/static/src/img/default_fanpage_avatar.png"
+                                                    alt="Default Avatar Contact"/>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_details d-flex flex-column px-1 text-right">
+                                    <ul>
+                                        <li>
+                                            <strong class="o_kanban_record_title oe_partner_heading text-primary" style="font-size: 1.5rem;">
+                                                <field name="name"/>
+                                            </strong>
+                                        </li>
+                                        <li t-if="record.external_id.raw_value">
+                                            <span><field name="external_id"/></span> <i class="fa fa-tags text-primary" title="Tags Name" role="img" aria-label="Tags Name"/>
+                                        </li>
+                                        <li t-if="record.gender.raw_value === 'female'">
+                                            <span><field name="gender"/></span> <i class="fa fa-female text-primary" title="Male - Gender" role="img" aria-label="Male - Gender"/>
+                                        </li>
+                                        <li t-if="record.gender.raw_value === 'male'">
+                                            <span><field name="gender"/></span> <i class="fa fa-male text-primary" title="Female - Gender" role="img" aria-label="Female - Gender"/>
+                                        </li>
+                                        <li t-if="record.phone.raw_value">
+                                            <span><field name="phone"/></span> <i class="fa fa-mobile text-primary" title="Mobile Phone" role="img" aria-label="Mobile Phone"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="co_omni_contact_form_view" model="ir.ui.view">
+            <field name="name">co_omni.contact.form</field>
+            <field name="model">co_omni.contact</field>
+            <field name="arch" type="xml">
+                <form string="Omni Contact">
+                    <header>
+                        <button class="btn btn-primary"
+                                type="object"
+                                name="go_to_channel_by_contact"
+                                icon="fa-mail-forward"
+                                string=" Go To Channel"
+                                t-if="channel_ids"
+                        />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" widget="char_emojis"/>
+                                <field name="external_id"/>
+                                <field name="gender"/>
+                                <field name="phone"/>
+                                <field name="channel_ids" invisible="True"/>
+                            </group>
+                            <group>
+                                <field name="image_1920" widget='image' class="oe_avatar" options='{"zoom": true, "preview_image": "image_128"}'/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="co_omni_contact_tree_view" model="ir.ui.view">
+            <field name="name">co_omni.contact.form</field>
+            <field name="model">co_omni.contact</field>
+            <field name="arch" type="xml">
+                <tree string="Omni Contact"
+                        decoration-info="gender == 'male'"
+                        decoration-success="gender == 'female'"
+                >
+                    <field name="name" class="font-weight-bold"/>
+                    <field name="external_id"/>
+                    <field name="gender"/>
+                    <field name="phone"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="co_omni_contact_act_window" model="ir.actions.act_window">
+            <field name="name">Omni Contact</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">co_omni.contact</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('co_omni_contact_kanban_view')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('co_omni_contact_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('co_omni_contact_form_view')})]"/>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create text-info">
+                    There is no examples click here to add new Contact.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

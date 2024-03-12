@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="assets_backend_js" name="co_omni_asset_backend_js_inherit" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/co_omni/static/src/js/banner_send_message.js"/>
+            <script type="text/javascript" src="/co_omni/static/src/js/group_expand.js"/>
+            <script type="text/javascript" src="/co_omni/static/src/js/tree_view_data_row.js"/>
+        </xpath>
+    </template>
+
+</odoo>

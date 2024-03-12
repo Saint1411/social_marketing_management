@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_co_omni_channel,access.co_omni.channel,model_co_omni_channel,base.group_user,1,1,1,1
+access_co_omni_account,access.co.omni.account,model_co_omni_account,base.group_user,1,1,1,1
+access_co_omni_message,access.co_omni.message,model_co_omni_message,base.group_user,1,1,1,1
+access_co_omni_contact,access.co.omni.contact,model_co_omni_contact,base.group_user,1,1,1,1
+access_co_omni_message_wizard,access.co_omni_message.wizard,model_co_omni_message_wizard,base.group_user,1,1,1,1

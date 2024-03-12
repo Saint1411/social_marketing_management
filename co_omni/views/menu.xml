@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem name="Omni" id="omni_root_menu"
+                    web_icon="co_omni,static/description/icon.png"/>
+
+        <menuitem
+                name="Account"
+                id="co_omni_account_view_menu"
+                parent="co_omni.omni_root_menu"
+                action="co_omni.co_omni_account_view_act_window"
+                sequence="1"
+        />
+
+        <menuitem
+                name="Channel"
+                id="co_omni_channel_view_menu"
+                parent="co_omni.omni_root_menu"
+                action="co_omni.co_omni_channel_view_act_window"
+                sequence="2"
+        />
+
+        <menuitem name="Contact"
+                id="co_omni_contact_menu"
+                parent="co_omni.omni_root_menu"
+                action="co_omni.co_omni_contact_act_window"
+                sequence="3"
+        />
+
+        <menuitem name="Message"
+                id="co_omni_message_menu"
+                parent="co_omni.omni_root_menu"
+                action="co_omni.co_omni_message_act_window"
+                sequence="4"
+        />
+
+        <menuitem name="Source"
+                id="utm_utm_source_menu"
+                parent="co_omni.omni_root_menu"
+                action="co_omni.co_omni_utm_source_action"
+                sequence="5"
+        />
+
+    </data>
+</odoo>

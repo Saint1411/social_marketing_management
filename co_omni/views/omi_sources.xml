@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="utm_source_view_tree" model="ir.ui.view">
+            <field name="name">utm.source.view.tree</field>
+            <field name="model">utm.source</field>
+            <field name="arch" type="xml">
+                <tree string="Source" editable="bottom" decoration-primary="name">
+                    <field name="name" class="font-weight-bold"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="utm_source_view_form" model="ir.ui.view">
+            <field name="name">utm.source.view.form</field>
+            <field name="model">utm.source</field>
+            <field name="arch" type="xml">
+                <form string="Omni Source">
+                    <sheet>
+                        <group>
+                            <field name="name" decoration-primary="name" class="font-weight-bold"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="co_omni_utm_source_action" model="ir.actions.act_window">
+            <field name="name">Omni Sources</field>
+            <field name="res_model">utm.source</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('utm_source_view_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('utm_source_view_form')})]"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face text-info">
+                    Define a new UTM source
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

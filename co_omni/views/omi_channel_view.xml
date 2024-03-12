@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="co_omni_channel_form_view" model="ir.ui.view">
+            <field name="name">co_omni.channel.view.form</field>
+            <field name="model">co_omni.channel</field>
+            <field name="arch" type="xml">
+                <form string="Omni Channel">
+                    <header>
+                        <button class="btn btn-primary"
+                                type="object"
+                                name="action_redirect_to_message"
+                                icon="fa-paper-plane"
+                                string=" View Message"
+                        />
+                    </header>
+                    <sheet>
+                        <field name="kanban_state" widget="state_selection"/>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="external_id"/>
+                                <field name="utm_source_id"/>
+                                <field name="account_id" widget="many2one_avatar"/>
+                            </group>
+                            <group>
+                                <field name="contact_id" widget="many2one_avatar"/>
+                                <field name="content"/>
+                                <field name="timestamp"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Message" name="message_id">
+                                <field name="message_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="co_omni_channel_tree_view" model="ir.ui.view">
+            <field name="name">co_omni.channel.view.tree</field>
+            <field name="model">co_omni.channel</field>
+            <field name="arch" type="xml">
+                <tree string="Omni Channel"
+                        create="0"
+                        class="co_omni_channel_tree"
+                        decoration-success="status == 'read'"
+                        decoration-info="status == 'unread'"
+                >
+                    <field name="utm_source_id"
+                            widget="reference"
+                            class="font-weight-bold"
+                            decoration-success="status == 'read'"
+                            decoration-info="status == 'unread'"
+                    />
+                    <field name="account_id" widget="many2one_avatar"/>
+                    <field name="name"/>
+                    <field name="content" string="Last Message"/>
+                    <field name="timestamp" string="Updated At"/>
+                    <field name="response_at"/>
+                    <field name="user_id" widget="many2one_avatar"/>
+                    <field name="status"
+                            widget="badge"
+                            class="text-white"
+                            decoration-success="status == 'read'"
+                            decoration-info="status == 'unread'"
+                    />
+                    <button class="btn btn-outline-primary border-0"
+                            type="object"
+                            name="action_redirect_to_message"
+                            icon="fa-paper-plane"
+                            string=" View Message"
+                    />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="co_omni_channel_kanban_view">
+            <field name="name">co_omni.channel.kanban</field>
+            <field name="model">co_omni.channel</field>
+            <field name="arch" type="xml">
+                <kanban class="o_co_omni_channel_kanban" sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="utm_source_id"/>
+                    <field name="kanban_state"/>
+                    <field name="account_id"/>
+                    <field name="last_message_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click o_has_icon ">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div t-if="record.account_id.value" class="font-weight-bold">
+                                            <field name="name"/>
+                                        </div>
+                                        <div>
+                                            <field name="account_id" widget="many2one_avatar"/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="mr-2 text-primary font-weight-bold lead">
+                                            <field name="utm_source_id" widget="reference"/>
+                                        </span>
+                                        <span>
+                                            <field name="kanban_state" widget="state_selection"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="small mt-1" t-if="record.content.value">
+                                    <i>
+                                        <q><field name="content"/></q>
+                                    </i>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button name="action_redirect_to_message"  t-if="record.last_message_id.value"
+                                        class="btn btn-outline-primary border-0"
+                                        type="object"
+                                    >
+                                        <i class="fa fa-comments mr-1" aria-label="New Message" role="img" title="New Massage"/> View Massage
+                                    </button>
+                                    <span class="d-flex align-items-center"  t-if="record.timestamp.value">
+                                        <span class="fa fa-clock-o text-primary mr-1" aria-label="Last Message" role="img" title="Timestamp"/>
+                                        <field name="timestamp"/>
+                                    </span>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="co_omni_channel_search_view" model="ir.ui.view">
+            <field name="name">co_omni.channel.view.search</field>
+            <field name="model">co_omni.channel</field>
+            <field name="arch" type="xml">
+                <search string="Omni Channel">
+                    <field name="name"/>
+                    <field name="external_id"/>
+                    <field name="account_id"/>
+                    <field name="utm_source_id"/>
+                    <field name="timestamp"/>
+                    <field name="kanban_state"/>
+                    <separator/>
+                    <filter string="Unread" name="status_unread" domain="[('kanban_state', '=', 'normal')]"/>
+                    <separator/>
+                    <filter string="Read" name="status_read" domain="[('kanban_state', '=', 'done')]"/>
+                    <separator/>
+                    <filter name="timestamps" string="Timestamp" date="timestamp"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Status" name="group_by_status" domain="[]"
+                                context="{'group_by':'kanban_state'}"/>
+                        <filter string="Channel" name="group_by_channel_id" domain="[]"
+                                context="{'group_by':'external_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="co_omni_channel_view_act_window" model="ir.actions.act_window">
+            <field name="name">Omni Channel</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">co_omni.channel</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_ids"
+                eval="[(5, 0, 0),
+                    (0, 0, {'view_mode': 'kanban', 'view_id': ref('co_omni_channel_kanban_view')}),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('co_omni_channel_tree_view')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('co_omni_channel_form_view')})
+                ]"/>
+            <field name="search_view_id" ref="co_omni_channel_search_view"/>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create text-warning">
+                    There is no examples click here to add new Omni Channel.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

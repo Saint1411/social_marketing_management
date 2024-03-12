@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="co_omni_message_onboarding_panel" name="co_omni.message.onboarding.panel">
+        <div class="alert alert-light mb-0 fixed-bottom py-2" role="alert"
+                t-if="request.env['co_omni.message'].sudo().search([])">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    <div class="input-group">
+                        <textarea
+                            id="message_content"
+                            class="form-control border border-primary"
+                            aria-label="Content"
+                        ></textarea>
+                        <div class="input-group-append">
+                            <button class="btn btn-primary display-5 px-3" id="btn_create_message"
+                                    type="button">
+                                <i class="fa fa-paper-plane"/> Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12" id="alert_result">
+
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+</odoo>
